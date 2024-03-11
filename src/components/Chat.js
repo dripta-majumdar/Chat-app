@@ -32,7 +32,7 @@ export const Chat = ({ room }) => {
     });
 
     return () => unsuscribe();
-  }, []);
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
