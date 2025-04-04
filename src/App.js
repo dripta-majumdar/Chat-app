@@ -1,4 +1,5 @@
-import React, { useState} from "react";
+
+import React, { useState } from "react";
 import { Chat } from "./components/Chat";
 import { Auth } from "./components/Auth.js";
 import { AppWrapper } from "./components/AppWrapper";
@@ -11,6 +12,7 @@ function ChatApp() {
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
   const [isInChat, setIsInChat] = useState(null);
   const [room, setRoom] = useState("");
+  const [error, setError] = useState("");
 
   if (!isAuth) {
     return (
@@ -24,17 +26,31 @@ function ChatApp() {
     );
   }
 
+  const handleEnterRoom = () => {
+    if (room.trim() === "") {
+      setError("Please enter a room name");
+      return;
+    }
+    setError("");
+    setIsInChat(true);
+  };
+
   return (
     <AppWrapper isAuth={isAuth} setIsAuth={setIsAuth} setIsInChat={setIsInChat}>
       {!isInChat ? (
         <div className="room">
           <label> Type room name: </label>
-          <input onChange={(e) => setRoom(e.target.value)} />
-          <button
-            onClick={() => {
-              setIsInChat(true);
-            }}
-          >
+          <input 
+            onChange={(e) => {
+              setRoom(e.target.value);
+              if (e.target.value.trim() !== "") {
+                setError("");
+              }
+            }} 
+            value={room}
+          />
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <button onClick={handleEnterRoom}>
             Enter Chat
           </button>
         </div>
